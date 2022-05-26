@@ -6,6 +6,9 @@ var endEl = document.querySelector("#end");
 var startBtn = document.querySelector("#start button");
 var quizTitle = document.querySelector("#quiz #title");
 var timerEL = document.querySelector('#timer');
+var question = document.querySelector ('#quiz #question');
+var questionNumber = 0;
+var questionsArray = [];
 
 function displayState() {
   if (state === 'start') {
@@ -45,6 +48,20 @@ function setTime() {
 
   }, 1000);
 }
+
+function displayQ () {
+  var answer1El = document.querySelector('#answer1');
+  var answer2El = document.querySelector('#answer2');
+  var answer3El = document.querySelector('#answer3');
+  var answer4El = document.querySelector('#answer4');
+
+  answer1El.textContent = questionsArray[currentQuestion].answer[0];
+  answer2El.textContent = questionsArray[currentQuestion].answer[1];
+  answer3El.textContent = questionsArray[currentQuestion].answer[2];
+  answer4El.textContent = questionsArray[currentQuestion].answer[3];
+
+}
+
 
 // function scoreCounter () {
 //   var score = 0;
