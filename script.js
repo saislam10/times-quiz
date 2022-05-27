@@ -22,6 +22,7 @@ function displayState() {
     startEl.style.display = 'none';
     quizEl.style.display = 'block';
     endEl.style.display = 'none';
+    questionBank();
   }
   if (state === 'end') {
     startEl.style.display = 'none';
@@ -82,22 +83,11 @@ function questionBank () {
   for (var i = 0; i < listOfAnswers.length; i++) {
     var buttonEl = document.createElement("button");
     buttonEl.textContent = listOfAnswers[i];
+    // questionEl.innerHTML = "";
     questionEl.appendChild(buttonEl);
   }
 }
 
-function displayQ() {
-  var answer1El = document.querySelector('#Answer1');
-  var answer2El = document.querySelector('#Answer2');
-  var answer3El = document.querySelector('#Answer3');
-  var answer4El = document.querySelector('#Answer4');
-
-  answer1El.textContent = questionsArray[questionNumber].answers[0];
-  answer2El.textContent = questionsArray[questionNumber].answers[1];
-  answer3El.textContent = questionsArray[questionNumber].answers[2];
-  answer4El.textContent = questionsArray[questionNumber].answers[3];
-
-}
 
 
 function setTime() {
@@ -116,6 +106,8 @@ function setTime() {
   }, 1000);
 }
 
+
+
 function init() {
   displayState();
   
@@ -125,17 +117,17 @@ startBtn.addEventListener("click", function () {
   state = 'quiz';
   displayState();
   setTime();
-  questionBank();
 });
 
 nextButton.addEventListener("click", function (event) {
   var position = 0;
   var element = event.target;
-
+  state = 'end';
   if (element.matches('#question')) {
     position++;
-    if (position < displayQuestions(question).length) {
-      questionEl.innerHTML ="";
+    questionEl.innerHTML ="";
+    if (position < questionBank(questions).length) {
+      questionBank();
     } else {
       state = 'end';
     }
