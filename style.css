@@ -1,6 +1,7 @@
 body {
     background-color: aqua;
     margin: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 #end h2 {
     font-size: 40px;
