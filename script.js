@@ -3,15 +3,62 @@ var state = 'begin';
 var beginPage = document.querySelector("#begin");
 var questionPage = document.querySelector("#questions");
 var initialsPage = document.querySelector("#initials");
-var highScorePage = document.querySelector ("#highScore")
+var highScorePage = document.querySelector("#highScore")
 var startBtn = document.querySelector("#starter");
 var submitBtn = document.querySelector("#submit");
+var restartBtn = document.querySelector('#highScore button')
 var timerEL = document.querySelector('#timer');
 var question = document.querySelector('#questions #question');
 var questionEl = document.querySelector("#question");
 var secondsLeft = 30;
 var score = document.querySelector('#score');
 var userName = document.querySelector('#name')
+
+
+var currentIndex = 0;
+var questions = [
+  {
+    title: "What's 1 + 0?",
+    answers: [
+      "One",
+      "Two",
+      "Three",
+      "Four",
+    ],
+    correct: 0
+  },
+  {
+    title: "What's 1 + 1?",
+    answers: [
+      "One",
+      "Two",
+      "Three",
+      "Four",
+
+    ],
+    correct: 1
+  },
+  {
+    title: "What's 1 + 2?",
+    answers: [
+      "One",
+      "Two",
+      "Three",
+      "Four",
+    ],
+    correct: 2
+  },
+  {
+    title: "What's 1 + 3?",
+    answers: [
+      "One",
+      "Two",
+      "Three",
+      "Four",
+    ],
+    correct: 3
+  }
+];
 
 function pageDisplay() {
   if (state === 'begin') {
@@ -40,51 +87,6 @@ function pageDisplay() {
     highScorePage.style.display = 'block';
   }
 }
-
-var currentIndex = 0; 
-var questions = [
-  {
-    title: "What's 1 + 0?",
-    answers: [
-      "One",
-      "Two", 
-      "Three",
-      "Four",
-    ],
-    correct: 0 
-  },
-  {
-    title: "What's 1 + 1?",
-    answers: [
-      "One",
-      "Two",
-      "Three",
-      "Four",
-      
-    ],
-    correct: 1 
-  },
-  {
-    title: "What's 1 + 2?",
-    answers: [
-      "One",
-      "Two", 
-      "Three",
-      "Four",
-    ],
-    correct: 2 
-  },
-  {
-    title: "What's 1 + 3?",
-    answers: [
-      "One",
-      "Two", 
-      "Three",
-      "Four",
-    ],
-    correct: 3 
-  }
-];
 
 questionEl.addEventListener("click", function (event) {
   var element = event.target;
@@ -116,12 +118,12 @@ function displayQuestions() {
   }
 }
 
-function highScoreSaver () {
+function highScoreSaver() {
   var highScores = JSON.parse(localStorage.getItem("leaderboard")) || [];
 
   var leaderboard = {
     initials: userName.value,
-    score: score
+    score: score,
   }
   highScores.push(leaderboard);
   var scoresString = JSON.stringify(highScores);
@@ -131,7 +133,7 @@ function highScoreSaver () {
 
 function timer() {
   var timerInterval = setInterval(function () {
-    if (state != "questions"){
+    if (state != "questions") {
       clearInterval(timerInterval);
     }
     secondsLeft--;
@@ -154,10 +156,17 @@ startBtn.addEventListener("click", function () {
 
 });
 
-submitBtn.addEventListener("click", function(){
+submitBtn.addEventListener("click", function () {
   state = 'highScore';
   pageDisplay();
-  // highScoreSaver();
+  timer();
+  highScoreSaver();
 });
+
+// restartBtn.addEventListener("click", function () {
+//   state = 'begin';
+//   pageDisplay();
+//   timer();
+// });
 
 init(); 
