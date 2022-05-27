@@ -1,139 +1,163 @@
-var state = 'start';
+var state = 'begin';
 
-var startEl = document.querySelector("#start");
-var quizEl = document.querySelector("#quiz");
-var endEl = document.querySelector("#end");
-var startBtn = document.querySelector("#start button");
-var nextButton = document.querySelector('#next')
+var beginPage = document.querySelector("#begin");
+var questionPage = document.querySelector("#questions");
+var initialsPage = document.querySelector("#initials");
+var highScorePage = document.querySelector ("#highScore")
+var startBtn = document.querySelector("#starter");
+var submitBtn = document.querySelector("#submit");
 var timerEL = document.querySelector('#timer');
-var question = document.querySelector('#quiz #question');
-var questionNumber = 0;
+var question = document.querySelector('#questions #question');
 var questionEl = document.querySelector("#question");
-var questionsArray = [];
 var secondsLeft = 30;
+var score = document.querySelector('#score');
+var userName = document.querySelector('#name')
 
-function displayState() {
-  if (state === 'start') {
-    startEl.style.display = 'block';
-    quizEl.style.display = 'none';
-    endEl.style.display = 'none';
+function pageDisplay() {
+  if (state === 'begin') {
+    beginPage.style.display = 'block';
+    questionPage.style.display = 'none';
+    initialsPage.style.display = 'none';
+    highScorePage.style.display = 'none';
   }
-  if (state === 'quiz') {
-    startEl.style.display = 'none';
-    quizEl.style.display = 'block';
-    endEl.style.display = 'none';
-    questionBank();
+  if (state === 'questions') {
+    beginPage.style.display = 'none';
+    questionPage.style.display = 'block';
+    initialsPage.style.display = 'none';
+    highScorePage.style.display = 'none';
   }
-  if (state === 'end') {
-    startEl.style.display = 'none';
-    quizEl.style.display = 'none';
-    endEl.style.display = 'block';
+  if (state === 'initials') {
+    beginPage.style.display = 'none';
+    questionPage.style.display = 'none';
+    initialsPage.style.display = 'block';
+    highScorePage.style.display = 'none';
+    score.textContent = "Your score: " + secondsLeft;
+  }
+  if (state === 'highScore') {
+    beginPage.style.display = 'none';
+    questionPage.style.display = 'none';
+    initialsPage.style.display = 'none';
+    highScorePage.style.display = 'block';
   }
 }
 
-function questionBank () {
+var currentIndex = 0; 
+var questions = [
+  {
+    title: "What's 1 + 0?",
+    answers: [
+      "One",
+      "Two", 
+      "Three",
+      "Four",
+    ],
+    correct: 0 
+  },
+  {
+    title: "What's 1 + 1?",
+    answers: [
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      
+    ],
+    correct: 1 
+  },
+  {
+    title: "What's 1 + 2?",
+    answers: [
+      "One",
+      "Two", 
+      "Three",
+      "Four",
+    ],
+    correct: 2 
+  },
+  {
+    title: "What's 1 + 3?",
+    answers: [
+      "One",
+      "Two", 
+      "Three",
+      "Four",
+    ],
+    correct: 3 
+  }
+];
 
-  var currentIndex = 0; // current question
-  var questions = [
-    {
-      title: "What's 1 + 0?",
-      answers: [
-        "One",
-        "Two", // index 1 of array is the correct answer 
-        "Three",
-        "Four",
-      ],
-      correct: 0 // index of correct answer
-    },
-    {
-      title: "What's 1 + 1?",
-      answers: [
-        "four",
-        "Two",
-        "Three",
-        "Four",
-        // index 2 of array is the correct answer 
-      ],
-      correct: 1 // index of correct answer
-    },
-    {
-      title: "What's 1 + 2?",
-      answers: [
-        "One",
-        "Two", // index 1 of array is the correct answer 
-        "Three",
-        "Four",
-      ],
-      correct: 2 // index of correct answer
-    },
-    {
-      title: "What's 1 + 3?",
-      answers: [
-        "One",
-        "Two", // index 1 of array is the correct answer 
-        "Three",
-        "Four",
-      ],
-      correct: 3 // index of correct answer
+questionEl.addEventListener("click", function (event) {
+  var element = event.target;
+  if (element.type === 'submit') {
+    if (!(element.textContent === questions[currentIndex].answers[questions[currentIndex].correct])) {
+      secondsLeft -= 3;
     }
-  ];
+    currentIndex++;
+    if (currentIndex === questions.length) {
+      state = "initials"
+      pageDisplay()
+    }
+    else {
+      displayQuestions();
+    }
+  }
 
-  var listOfAnswers = questions[currentIndex].answers;
+})
 
-  for (var i = 0; i < listOfAnswers.length; i++) {
-    var buttonEl = document.createElement("button");
-    buttonEl.textContent = listOfAnswers[i];
-    // questionEl.innerHTML = "";
-    questionEl.appendChild(buttonEl);
+function displayQuestions() {
+  questionEl.innerHTML = "";
+  var questionTitle = document.createElement('h2');
+  questionTitle.textContent = questions[currentIndex].title;
+  questionEl.appendChild(questionTitle);
+  for (var i = 0; i < questions[currentIndex].answers.length; i++) {
+    var questionButton = document.createElement('button');
+    questionButton.textContent = questions[currentIndex].answers[i];
+    questionEl.appendChild(questionButton);
   }
 }
 
+function highScoreSaver () {
+  var highScores = JSON.parse(localStorage.getItem("leaderboard")) || [];
 
+  var leaderboard = {
+    initials: userName.value,
+    score: score
+  }
+  highScores.push(leaderboard);
+  var scoresString = JSON.stringify(highScores);
+  window.localStorage.setItem("leaderboard", scoresString);
+  document.getElementById("scores").textContent = scoresString;
+}
 
-function setTime() {
-  // Sets interval in variable
+function timer() {
   var timerInterval = setInterval(function () {
+    if (state != "questions"){
+      clearInterval(timerInterval);
+    }
     secondsLeft--;
     timerEL.textContent = secondsLeft + " seconds left to finish quiz.";
-
     if (secondsLeft === 0) {
-      // Stops execution of action at set interval
       clearInterval(timerInterval);
-
-
     }
-
   }, 1000);
 }
 
-
-
 function init() {
-  displayState();
-  
+  pageDisplay()
 }
 
 startBtn.addEventListener("click", function () {
-  state = 'quiz';
-  displayState();
-  setTime();
+  state = 'questions';
+  pageDisplay();
+  timer();
+  displayQuestions();
+
 });
 
-nextButton.addEventListener("click", function (event) {
-  var position = 0;
-  var element = event.target;
-  state = 'end';
-  if (element.matches('#question')) {
-    position++;
-    questionEl.innerHTML ="";
-    if (position < questionBank(questions).length) {
-      questionBank();
-    } else {
-      state = 'end';
-    }
-  }
-  displayState();
+submitBtn.addEventListener("click", function(){
+  state = 'highScore';
+  pageDisplay();
+  // highScoreSaver();
 });
 
-init();
-
+init(); 

@@ -3,24 +3,28 @@ body {
     margin: auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-#end h2 {
+
+#highScore {
+    text-align: center;
+}
+#initials h2 {
     font-size: 40px;
     text-align: center;
 
 }
-#end {
+#initials {
     text-align: center;
 }
-#quiz h2{
+#questions h2{
     font-size: 40px;
     text-align: center;
 }
-#start h2{
+#begin h2{
     font-size: 40px;
     text-align: center;
 }
 #timer {
-    text-align: right;
+    text-align: center;
     padding: 20px;
 }
 
