@@ -56,3 +56,9 @@ dt::after{
     flex-direction: column;
     align-items: center;
 }
+
+#submit {
+    margin-top: 20px;
+    margin-left: 40px;
+    justify-content: center;
+}
