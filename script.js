@@ -8,8 +8,9 @@ var nextButton = document.querySelector('#next')
 var timerEL = document.querySelector('#timer');
 var question = document.querySelector('#quiz #question');
 var questionNumber = 0;
+var questionEl = document.querySelector("#question");
 var questionsArray = [];
-var secondsLeft = 5;
+var secondsLeft = 30;
 
 function displayState() {
   if (state === 'start') {
@@ -21,7 +22,6 @@ function displayState() {
     startEl.style.display = 'none';
     quizEl.style.display = 'block';
     endEl.style.display = 'none';
-    displayQuestions();
   }
   if (state === 'end') {
     startEl.style.display = 'none';
@@ -30,191 +30,118 @@ function displayState() {
   }
 }
 
-function displayQuestions(){
-var questionEl = document.querySelector("#question");
-var currentIndex = 0; // current question
-var questions = [
- {
-   title: "What's 1 + 0?",
-   answers: [
-     "One",
-     "Two", // index 1 of array is the correct answer 
-     "Three",
-     "Four",
-   ],
-   correct: 0 // index of correct answer
- },
- {
-   title: "What's 1 + 1?",
-   answers: [
-     "One",
-     "Two", 
-     "Three", 
-     "Four",
-     // index 2 of array is the correct answer 
-   ],
-   correct: 1 // index of correct answer
- },
- {
-  title: "What's 1 + 2?",
-  answers: [
-    "One",
-    "Two", // index 1 of array is the correct answer 
-    "Three",
-    "Four",
-  ],
-  correct: 2 // index of correct answer
-},
-{
-  title: "What's 1 + 3?",
-  answers: [
-    "One",
-    "Two", // index 1 of array is the correct answer 
-    "Three",
-    "Four",
-  ],
-  correct: 3 // index of correct answer
+function questionBank () {
+
+  var currentIndex = 0; // current question
+  var questions = [
+    {
+      title: "What's 1 + 0?",
+      answers: [
+        "One",
+        "Two", // index 1 of array is the correct answer 
+        "Three",
+        "Four",
+      ],
+      correct: 0 // index of correct answer
+    },
+    {
+      title: "What's 1 + 1?",
+      answers: [
+        "four",
+        "Two",
+        "Three",
+        "Four",
+        // index 2 of array is the correct answer 
+      ],
+      correct: 1 // index of correct answer
+    },
+    {
+      title: "What's 1 + 2?",
+      answers: [
+        "One",
+        "Two", // index 1 of array is the correct answer 
+        "Three",
+        "Four",
+      ],
+      correct: 2 // index of correct answer
+    },
+    {
+      title: "What's 1 + 3?",
+      answers: [
+        "One",
+        "Two", // index 1 of array is the correct answer 
+        "Three",
+        "Four",
+      ],
+      correct: 3 // index of correct answer
+    }
+  ];
+
+  var listOfAnswers = questions[currentIndex].answers;
+
+  for (var i = 0; i < listOfAnswers.length; i++) {
+    var buttonEl = document.createElement("button");
+    buttonEl.textContent = listOfAnswers[i];
+    questionEl.appendChild(buttonEl);
+  }
 }
-];
 
-var listOfAnswers = questions[currentIndex].answers;
+function displayQ() {
+  var answer1El = document.querySelector('#Answer1');
+  var answer2El = document.querySelector('#Answer2');
+  var answer3El = document.querySelector('#Answer3');
+  var answer4El = document.querySelector('#Answer4');
 
-for (var i = 0; i < listOfAnswers.length; i++) {
-  var buttonEl = document.createElement("button");
-  buttonEl.textContent = listOfAnswers[i];
-  questionEl.appendChild(buttonEl);
+  answer1El.textContent = questionsArray[questionNumber].answers[0];
+  answer2El.textContent = questionsArray[questionNumber].answers[1];
+  answer3El.textContent = questionsArray[questionNumber].answers[2];
+  answer4El.textContent = questionsArray[questionNumber].answers[3];
+
 }
+
+
+function setTime() {
+  // Sets interval in variable
+  var timerInterval = setInterval(function () {
+    secondsLeft--;
+    timerEL.textContent = secondsLeft + " seconds left to finish quiz.";
+
+    if (secondsLeft === 0) {
+      // Stops execution of action at set interval
+      clearInterval(timerInterval);
+
+
+    }
+
+  }, 1000);
 }
-//   function questionBank() {
-//     var allQuestions = [
-//       {
-      //   question: "What's 1 + 0?",
-      //   answers: {
-      //     0: "one",
-      //     1: "two",
-      //     2: "three",
-      //     3: "four"
-      //   },
-      //   correct: 0
-      // },
-
-//       {
-//         question: "What's 1 + 1?",
-//         answers: {
-//           0: "one",
-//           1: "two",
-//           2: "three",
-//           3: "four"
-//         },
-//         correct: 1
-
-//       },
-//       {
-//         question: "What's 1 + 2?",
-//         answers: {
-//           0: "one",
-//           1: "two",
-//           2: "three",
-//           3: "four"
-//         },
-//         correct: 2
-
-//       },
-//       {
-//         question: "What's 1 + 3?",
-//         answers: {
-//           0: "one",
-//           1: "two",
-//           2: "three",
-//           3: "four"
-//         },
-//         correct: 3
-//       }
-//     ]
-//     questionsArray.push(allQuestions);
-//   }
-//   questionBank();
-// }
-
-// function displayQ() {
-//   var answer1El = document.querySelector('#Answer1');
-//   var answer2El = document.querySelector('#Answer2');
-//   var answer3El = document.querySelector('#Answer3');
-//   var answer4El = document.querySelector('#Answer4');
-
-//   answer1El.textContent = questionsArray[questionNumber].answers[0];
-//   answer2El.textContent = questionsArray[questionNumber].answers[1];
-//   answer3El.textContent = questionsArray[questionNumber].answers[2];
-//   answer4El.textContent = questionsArray[questionNumber].answers[3];
-
-// }
-
-
-// function setTime() {
-//   // Sets interval in variable
-//   var timerInterval = setInterval(function () {
-//     secondsLeft--;
-//     timerEL.textContent = secondsLeft + " seconds left to finish quiz.";
-
-//     if (secondsLeft === 0) {
-//       // Stops execution of action at set interval
-//       clearInterval(timerInterval);
-
-
-//     }
-
-//   }, 1000);
-// }
-
-
-
-
-// function scoreCounter () {
-//   var score = 0;
-
-//   for (var i = 0; )
-
-//   if (secondsLeft > 0){
-//     secondsLeft += score;
-
-//   }
-
-// }
-
-
-// function displayEnd() {
-//   questionsEl.innerHTML = "<h2>Fin</h2>";
-// }
 
 function init() {
   displayState();
-  setTime();
-  displayQuestions();
+  
 }
 
 startBtn.addEventListener("click", function () {
   state = 'quiz';
   displayState();
+  setTime();
+  questionBank();
 });
 
-nextButton.addEventListener("click", function () {
-  state = 'end';
+nextButton.addEventListener("click", function (event) {
+  var position = 0;
+  var element = event.target;
+
+  if (element.matches('#question')) {
+    position++;
+    if (position < displayQuestions(question).length) {
+      questionEl.innerHTML ="";
+    } else {
+      state = 'end';
+    }
+  }
   displayState();
 });
-
-// nextButton.addEventListener('click', function (event) {
-//   var element = event.target;
-//   if (element.matches('#Questions')) {
-//     questionNumber++;
-//     if (questionNumber < allQuestions.length) {
-//       displayQ();
-//     } else {
-//       displayEnd();
-//     }
-//   }
-// });
-
-
 
 init();
 
