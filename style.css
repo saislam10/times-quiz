@@ -32,6 +32,27 @@ button {
     background-color: bisque;
     color: blue;
     display: block;
-    margin-left: 600px;
     padding: 10px;
+}
+
+dl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+dt::after{
+    content: ":";
+    display: inline-block;
+    margin: 8px;
+}
+#questions,
+#question,
+#initials,
+#highScore,
+#begin,
+#restart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

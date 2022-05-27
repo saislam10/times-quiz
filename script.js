@@ -1,5 +1,4 @@
 var state = 'begin';
-
 var beginPage = document.querySelector("#begin");
 var questionPage = document.querySelector("#questions");
 var initialsPage = document.querySelector("#initials");
@@ -8,53 +7,51 @@ var startBtn = document.querySelector("#starter");
 var submitBtn = document.querySelector("#submit");
 var restartBtn = document.querySelector('#highScore button')
 var timerEL = document.querySelector('#timer');
-var question = document.querySelector('#questions #question');
 var questionEl = document.querySelector("#question");
 var secondsLeft = 30;
 var score = document.querySelector('#score');
 var userName = document.querySelector('#name')
-
-
 var currentIndex = 0;
+
 var questions = [
   {
-    title: "What's 1 + 0?",
+    title: "What is the format called that is used for storing and transporting data?",
     answers: [
-      "One",
-      "Two",
-      "Three",
-      "Four",
+      "Json",
+      "HTML",
+      "CSS",
+      "Java",
     ],
     correct: 0
   },
   {
-    title: "What's 1 + 1?",
+    title: "What is the default behavior called that is used to move declarations to the top of the current scope??",
     answers: [
-      "One",
-      "Two",
-      "Three",
-      "Four",
+      "Jumping",
+      "Sorting",
+      "Hoisting",
+      "Looping",
 
-    ],
-    correct: 1
-  },
-  {
-    title: "What's 1 + 2?",
-    answers: [
-      "One",
-      "Two",
-      "Three",
-      "Four",
     ],
     correct: 2
   },
   {
-    title: "What's 1 + 3?",
+    title: "In JavaScript, what element is used to store multiple values in a single variable?",
     answers: [
-      "One",
-      "Two",
-      "Three",
-      "Four",
+      "Functions",
+      "Variables",
+      "Parsing",
+      "Arrays",
+    ],
+    correct: 3
+  },
+  {
+    title: "What is the element used and hidden in code that explains things and makes the content more readable?",
+    answers: [
+      "Code",
+      "Notes",
+      "Quotes",
+      "Comments",
     ],
     correct: 3
   }
@@ -62,21 +59,21 @@ var questions = [
 
 function pageDisplay() {
   if (state === 'begin') {
-    beginPage.style.display = 'block';
+    beginPage.style.display = 'flex';
     questionPage.style.display = 'none';
     initialsPage.style.display = 'none';
     highScorePage.style.display = 'none';
   }
   if (state === 'questions') {
     beginPage.style.display = 'none';
-    questionPage.style.display = 'block';
+    questionPage.style.display = 'flex';
     initialsPage.style.display = 'none';
     highScorePage.style.display = 'none';
   }
   if (state === 'initials') {
     beginPage.style.display = 'none';
     questionPage.style.display = 'none';
-    initialsPage.style.display = 'block';
+    initialsPage.style.display = 'flex';
     highScorePage.style.display = 'none';
     score.textContent = "Your score: " + secondsLeft;
   }
@@ -84,7 +81,7 @@ function pageDisplay() {
     beginPage.style.display = 'none';
     questionPage.style.display = 'none';
     initialsPage.style.display = 'none';
-    highScorePage.style.display = 'block';
+    highScorePage.style.display = 'flex';
   }
 }
 
@@ -96,14 +93,13 @@ questionEl.addEventListener("click", function (event) {
     }
     currentIndex++;
     if (currentIndex === questions.length) {
-      state = "initials"
-      pageDisplay()
+      state = "initials";
+      pageDisplay();
     }
     else {
       displayQuestions();
     }
   }
-
 })
 
 function displayQuestions() {
@@ -120,17 +116,29 @@ function displayQuestions() {
 
 function highScoreSaver() {
   var highScores = JSON.parse(localStorage.getItem("leaderboard")) || [];
-
   var leaderboard = {
     initials: userName.value,
-    score: score,
+    score: secondsLeft,
   }
   highScores.push(leaderboard);
   var scoresString = JSON.stringify(highScores);
   window.localStorage.setItem("leaderboard", scoresString);
-  document.getElementById("scores").textContent = scoresString;
+  displayHighScores();
 }
 
+function displayHighScores() {
+  var items = JSON.parse(localStorage.getItem("leaderboard")) || [];
+  for (var i = 0; i < items.length; i++) {
+    var dlEl = document.createElement("dl");
+    var dtEl = document.createElement("dt");
+    var ddEl = document.createElement("dd");
+    dlEl.appendChild(dtEl);
+    dlEl.appendChild(ddEl);
+    dtEl.textContent = items[i].initials;
+    ddEl.textContent = items[i].score;
+    document.getElementById("scores").appendChild(dlEl);
+  }
+}
 function timer() {
   var timerInterval = setInterval(function () {
     if (state != "questions") {
@@ -153,7 +161,6 @@ startBtn.addEventListener("click", function () {
   pageDisplay();
   timer();
   displayQuestions();
-
 });
 
 submitBtn.addEventListener("click", function () {
@@ -163,10 +170,11 @@ submitBtn.addEventListener("click", function () {
   highScoreSaver();
 });
 
-// restartBtn.addEventListener("click", function () {
-//   state = 'begin';
-//   pageDisplay();
-//   timer();
-// });
+restartBtn.addEventListener("click", function () {
+  state = 'begin';
+  currentIndex = 0;
+  secondsLeft = 30;
+  pageDisplay();
+});
 
 init(); 
